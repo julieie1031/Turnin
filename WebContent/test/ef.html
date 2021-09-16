@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+div {
+	font-weight: bold;
+	text-align: center;
+	padding: 20px;
+	font-size: 30px;
+}
+
+.box1 {
+	background-color: lightgray;
+	width: 90px;
+	height: 130px;
+	margin: 100px;
+}
+#pic{
+position: absolute;
+left : 300px;
+
+}
+#pic1{
+position: absolute;
+left : 500px;
+}
+#pic2{
+position: absolute;
+left : 700px;
+}
+</style>
+</head>
+<body>
+	<div class="box1">
+		<script type="text/javascript" src="date2.js"></script>
+		<div id = "pic">
+		<img id="preview" src="" width="200"> <input type="file"
+			id="getfile" accept="image/*">
+		
+			<script>
+				var file = document.querySelector('#getfile');
+
+				file.onchange = function() {
+					var fileList = file.files;
+
+					// 읽기
+					var reader = new FileReader();
+					reader.readAsDataURL(fileList[0]);
+
+					//로드 한 후
+					reader.onload = function() {
+						//로컬 이미지를 보여주기
+						document.querySelector('#preview').src = reader.result;
+					};
+				};
+			</script>
+		</div>
+		<div id = "pic1">
+
+		</div>
+		<div id = "pic2">
+
+		</div>
+	</div>
+<jsp:include page="rr.jsp" />
+</body>
+</html>

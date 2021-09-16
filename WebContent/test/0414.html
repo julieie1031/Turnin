@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link href="0414.css" rel="stylesheet">
+<script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
+<title>Insert title here</title>
+<style>
+nav {
+	margin-left: 5px;
+	color: black;
+	width: 200px;
+	height: 300px;
+	float: left;
+}
+
+h2 {
+	text-align: center;
+}
+
+h1 {
+	font-size: 12px;
+	color: white;
+}
+
+.menu {
+	font-size: 12px;
+	color: black;
+}
+
+.login {
+	margin: 15px;
+	margin-top: 15px;
+	border: 1px solid #D3D3D3;
+	background-color: white;
+	width: 190px;
+	height: 130px;
+	color: black;
+	font-size: 12px;
+	padding: 10px;
+	border-radius: 1em;
+	border: 1px solid #D3D3D3;
+	background-color: white;
+	width: 190px;
+	height: 130px;
+}
+</style>
+</head>
+<body>
+	<nav>
+		<div class="login" style="background-color: #D3D3D3;">
+			<h1>
+				로그인 | <a href="b.jsp" style="color: white">회원가입</a>
+			</h1>
+			<form action="index.jsp" method="post">
+				ID <br /> <input type="text" name="id" size="18"><br />
+				Password <br /> <input type="password" name="pwd" size="18"><br />
+				<label><input type="checkbox" name="checkbox"
+					value="remember">아이디를 기억할까요?</label> <input type="submit"
+					value="Log-in" size="3">
+
+			</form>
+		</div>
+	</nav>
+	<div class="logo">
+		<a href="#"><img src="../img/33.png" width="370" height="100" /></a>
+	</div>
+	<!-- input칸 -->
+	<form action="addProductProc.jsp" name="newProduct" enctype="multipart/form-data"
+			class="form-horizontal" method="post">
+			<div class="form-group row">
+				<div class="col-sm-3">
+					<input type="text" name="proId" id="proId"
+						 class="form-control">
+				</div>
+			</div>
+			</form>
+				<!-- 리스트 -->
+				<jsp:useBean id="product" class="com.conan.vo.Products"
+      scope="request" />
+   
+   <%
+   
+      InitialContext ic = new InitialContext();
+
+   DataSource ds = (DataSource) ic.lookup("java:comp/env/jdbc/myoracle");
+   Connection conn = ds.getConnection();
+   PreparedStatement pstmt = conn.prepareStatement("select * from Products");
+   ResultSet rs = pstmt.executeQuery();
+   //데이터를 리스트에 담음
+   ArrayList<Products> pl = new ArrayList<Products>();
+   while(rs.next()){
+      pl.add(new Products(rs.getString(1),rs.getString(2),rs.getInt(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getInt(7),rs.getString(8)));
+      
+      
+   }
+   rs.close(); pstmt.close(); conn.close();
+   
+   %>
+   <% String uploadedUrl = request.getContextPath()+"/upload"; %>
+
+   <!-- 상품목록 -->
+   <div class="jumbotron">
+      <div class="container">
+         <h1 class="display-3">상품목록</h1>
+      </div>
+   </div>
+   
+   <!-- 상품 -->
+
+   <div class="container">
+      <!-- 행으로 가운데에 -->
+      <div class="row" align="center">
+         <!-- list에 리스트를 넣기 -->
+         <c:set var="list" value="<%=pl %>"/>
+         <c:set var = "imgUrl" value = "<%=uploadedUrl %>"></c:set>
+            <!-- 리스트를 한행씩 item에 넣고 출력 -->
+            <c:forEach var="item" items="${list}">
+            <!-- 열로  -->
+            <div class="col-md-4" >
+             <img src = "<%=uploadedUrl %>/${item.fileName}" alt = "해당 이미지 없음" width = "80%"> 
+               <h3>${item.proName }</h3>
+               <p>${item.description }</p>
+               <p>${item.unitPrice }원</p>
+               <p><a href="productDetail.jsp?proId=${item.proId}"
+                  class="btn btn-secondary" role="button">상세정보 &raquo;</a>
+            </div>
+            </c:forEach>
+      </div>
+   </div>
+
+
+</body>
+</html>
